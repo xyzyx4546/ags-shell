@@ -1,0 +1,25 @@
+@use "colors.scss" as *;
+
+.notifications {
+  margin: 20px;
+
+  .notification {
+    padding: 8px 10px;
+    border-radius: 15px;
+    background-color: $background;
+
+    .image {
+      min-width: 50px;
+      min-height: 50px;
+    }
+
+    .title {
+      font-size: 22px;
+    }
+
+    .content {
+      font-size: 14px;
+      margin-top: 8px;
+    }
+  }
+}
