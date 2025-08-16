@@ -1,0 +1,42 @@
+@use "colors.scss" as *;
+
+window.bar {
+  background: transparent;
+  padding: 12px;
+  padding-bottom: 0;
+
+  * {
+    font-size: 18px;
+  }
+
+  .item {
+    padding: 2px 10px 0 10px;
+    border-radius: 100px;
+    background: $background;
+  }
+
+  .workspaces {
+    color: $purple;
+    padding-right: 15px;
+
+    .empty label {
+      color: $comment;
+    }
+  }
+
+  .brightness {
+    color: $orange;
+  }
+
+  .volume {
+    color: $green;
+  }
+
+  .battery {
+    color: $yellow;
+  }
+
+  .clock {
+    color: $cyan;
+  }
+}

@@ -1,0 +1,16 @@
+@use "colors.scss" as *;
+
+levelbar {
+  all: unset;
+}
+
+window.osd {
+  padding: 10px;
+  background: $background;
+  border-radius: 15px;
+  min-width: 50px;
+  
+  levelbar block.filled {
+    background: $purple;
+  }
+}
