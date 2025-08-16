@@ -16,7 +16,7 @@ export default function Osd() {
   const [mode, setMode] = createState<Mode>('volume')
   let timeoutId: GLib.Source | null = null
 
-  const showOsd = (m: Mode) => {
+  function showOsd(m: Mode) {
     setMode(m)
     win.show()
     if (timeoutId) clearTimeout(timeoutId)
