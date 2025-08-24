@@ -7,9 +7,8 @@ import AstalBattery from 'gi://AstalBattery'
 import AstalTray from 'gi://AstalTray'
 import AstalHyprland from 'gi://AstalHyprland'
 import AstalWp from 'gi://AstalWp'
-import { For, createBinding, createState } from 'ags'
+import { For, createBinding } from 'ags'
 import { createPoll } from 'ags/time'
-import { getBrightness, monitorBrightness } from '../utils'
 
 function Workspaces() {
   const hyprland = AstalHyprland.get_default()
@@ -70,20 +69,6 @@ function Tray() {
 
 // TODO: network
 
-// TODO: omit if not supported
-function Brightness() {
-  const [brightness, setBrightness] = createState(getBrightness())
-
-  monitorBrightness(() => setBrightness(getBrightness()))
-
-  return (
-    <box class='item brightness' visible={brightness !== undefined}>
-      <image iconName='display-brightness-symbolic' />
-      <label label={brightness.as((b) => ` ${b * 100}%`)} />
-    </box>
-  )
-}
-
 function Volume() {
   const { defaultSpeaker: speaker } = AstalWp.get_default()!
   const iconName = createBinding(speaker, 'volumeIcon')
@@ -141,7 +126,6 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
           <Tray />
         </box>
         <box $type='end' spacing={10}>
-          <Brightness />
           <Volume />
           <Battery />
           <Clock />
