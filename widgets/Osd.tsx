@@ -5,9 +5,15 @@ import Adw from 'gi://Adw'
 import AstalWp from 'gi://AstalWp'
 import { Astal } from 'ags/gtk4'
 import { createBinding, createState, With } from 'ags'
-import { getBrightness, monitorBrightness } from '../utils'
+import { monitorFile, readFile } from 'ags/file'
+import { exec } from 'ags/process'
 
 type Mode = 'volume' | 'brightness'
+
+const backlightPath = '/sys/class/backlight'
+const backlight = `${backlightPath}/${exec(`sh -c 'ls -w1 ${backlightPath} | head -1'`)}`
+const brightnessFile = `${backlight}/brightness`
+const maxBrightness = parseInt(readFile(`${backlight}/max_brightness`))
 
 export default function Osd() {
   const { defaultSpeaker: speaker } = AstalWp.get_default()!
@@ -42,11 +48,11 @@ export default function Osd() {
     })
   })
 
-  const [brightness, setBrightness] = createState(getBrightness())
+  const [brightness, setBrightness] = createState(0)
   const brightnessPercent = brightness.as((r) => `${Math.round(r * 100)}`)
 
-  monitorBrightness(() => {
-    setBrightness(getBrightness())
+  monitorFile(brightnessFile, () => {
+    setBrightness(parseInt(readFile(brightnessFile)) / maxBrightness)
     showOsd('brightness')
   })
 
