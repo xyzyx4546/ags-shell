@@ -36,17 +36,9 @@ export default function Osd() {
   const volumeIcon = createBinding(speaker, 'volumeIcon')
   const volumePercent = volume.as((p) => `${Math.round(p * 100)}`)
 
-  ;['notify::volume', 'notify::mute'].forEach((signal: string) => {
-    // HACK: Avoid showing OSD on startup
-    let first = true
-    speaker.connect(signal, () => {
-      if (first) {
-        first = false
-        return
-      }
-      showOsd('volume')
-    })
-  })
+  ;['notify::volume', 'notify::mute'].forEach((signal: string) =>
+    speaker.connect(signal, () => showOsd('volume')),
+  )
 
   const [brightness, setBrightness] = createState(0)
   const brightnessPercent = brightness.as((r) => `${Math.round(r * 100)}`)
@@ -63,6 +55,7 @@ export default function Osd() {
       name='Osd'
       class='osd'
       anchor={Astal.WindowAnchor.RIGHT}
+      layer={Astal.Layer.OVERLAY}
       marginRight={50}
       application={app}
     >
