@@ -13,7 +13,7 @@ import { createPoll } from 'ags/time'
 function Workspaces() {
   const hyprland = AstalHyprland.get_default()
   const workspaces = createBinding(hyprland, 'workspaces').as((wss) =>
-    wss.filter((ws) => !(ws.id >= -99 && ws.id <= -2)).sort((a, b) => a.id - b.id),
+    wss.filter((ws) => ws.id >= 0 && ws.monitor.id === 0).sort((a, b) => a.id - b.id),
   )
   const focusedWorkspace = createBinding(hyprland, 'focusedWorkspace')
 
