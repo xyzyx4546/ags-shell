@@ -65,6 +65,7 @@ export default function Notifications() {
   return (
     <window
       class='notifications'
+      monitor={0}
       visible={notifications((ns) => ns.length > 0)}
       anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.RIGHT}
     >

@@ -33,6 +33,7 @@ export default function Applauncher() {
       visible={false}
       name='Applauncher'
       class='applauncher'
+      monitor={0}
       keymode={Astal.Keymode.EXCLUSIVE}
       application={app}
       onHide={() => searchentry.text = ''}

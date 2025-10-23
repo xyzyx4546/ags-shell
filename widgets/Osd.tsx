@@ -54,6 +54,7 @@ export default function Osd() {
       visible={false}
       name='Osd'
       class='osd'
+      monitor={0}
       anchor={Astal.WindowAnchor.RIGHT}
       layer={Astal.Layer.OVERLAY}
       marginRight={50}
