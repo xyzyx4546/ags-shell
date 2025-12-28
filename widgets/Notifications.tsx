@@ -51,7 +51,9 @@ export default function Notifications() {
 
   notifd.connect('notified', (_, id, replaced) => {
     const notification = notifd.get_notification(id)
-    if (replaced && notifications.get().some((n) => n.id === id)) {
+    if (!notification) return
+
+    if (replaced && notifications().some((n) => n.id === id)) {
       setNotifications((ns) => ns.map((n) => (n.id === id ? notification : n)))
     } else {
       setNotifications((ns) => [notification, ...ns])

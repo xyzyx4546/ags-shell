@@ -1,5 +1,13 @@
 {
   "dependencies": {
-    "ags": "*"
+    "ags": "*",
+    "gnim": "*"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "jsxSingleQuote": true,
+    "printWidth": 100,
+    "tabWidth": 2
   }
 }

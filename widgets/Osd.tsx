@@ -10,10 +10,9 @@ import { exec } from 'ags/process'
 
 type Mode = 'volume' | 'brightness'
 
-const backlightPath = '/sys/class/backlight'
-const backlight = `${backlightPath}/${exec(`sh -c 'ls -w1 ${backlightPath} | head -1'`)}`
-const brightnessFile = `${backlight}/brightness`
-const maxBrightness = parseInt(readFile(`${backlight}/max_brightness`))
+const device = exec(`sh -c 'ls -w1 /sys/class/backlight | head -1'`).trim()
+const brightnessFile = `/sys/class/backlight/${device}/brightness`
+const maxBrightness = device ? parseInt(readFile(`/sys/class/backlight/${device}/max_brightness`)) : 0
 
 export default function Osd() {
   const { defaultSpeaker: speaker } = AstalWp.get_default()!
