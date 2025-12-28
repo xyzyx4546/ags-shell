@@ -7,56 +7,52 @@
     };
   };
 
-  outputs = {
-    nixpkgs,
-    ags,
-    ...
-  }: let
+  outputs = {nixpkgs, ...} @ inputs: let
     system = "x86_64-linux";
     pkgs = import nixpkgs {inherit system;};
 
-    pname = "ags-shell";
+    name = "ags-shell";
 
-    extraPackages = with ags.packages.${system}; [
+    extraPackages = with inputs.ags.packages.${system}; [
       pkgs.libadwaita
       astal4
+      apps
       battery
+      hyprland
+      notifd
       tray
       wireplumber
-      hyprland
-      apps
-      notifd
     ];
+
+    ags = inputs.ags.packages.${system}.default.override {inherit extraPackages;};
   in {
-    packages.${system}.default = pkgs.stdenv.mkDerivation {
-      name = pname;
-      src = ./.;
+    packages.${system} = {
+      default = pkgs.stdenv.mkDerivation {
+        inherit name;
+        src = ./.;
 
-      nativeBuildInputs = with pkgs; [
-        wrapGAppsHook3
-        gobject-introspection
-        ags.packages.${system}.default
-      ];
+        nativeBuildInputs = with pkgs; [
+          wrapGAppsHook3
+          gobject-introspection
+          ags
+        ];
 
-      buildInputs = extraPackages;
+        buildInputs = extraPackages;
 
-      installPhase = ''
-        runHook preInstall
+        installPhase = ''
+          mkdir -p $out/bin
+          ags bundle app.ts $out/bin/${name}
+        '';
+      };
 
-        mkdir -p $out/bin $out/share
-        cp -r * $out/share
-        ags bundle app.ts $out/bin/${pname} -d "SRC='$out/share'"
-
-        runHook postInstall
-      '';
+      inherit ags;
     };
 
     devShells.${system}.default = pkgs.mkShell {
-      buildInputs = [
-        (ags.packages.${system}.default.override {
-          inherit extraPackages;
-        })
-      ];
+      shellHook = ''
+        ${pkgs.watchexec}/bin/watchexec -e ts,tsx,scss -r "${ags}/bin/ags run ."
+        exit
+      '';
     };
   };
 }
