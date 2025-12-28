@@ -4,42 +4,65 @@ import Adw from 'gi://Adw'
 import Pango from 'gi://Pango'
 import { createState, For } from 'ags'
 import Astal from 'gi://Astal?version=4.0'
+import GLib from 'gi://GLib'
 
 type Props = {
   notification: AstalNotifd.Notification
 }
 
 function Notification({ notification: n }: Props) {
-  const notifd = AstalNotifd.get_default()
-
   return (
     <Adw.Clamp maximumSize={400}>
-      <Gtk.GestureClick onPressed={() => n.dismiss()} />
-      <Gtk.GestureClick onPressed={() => notifd.notifications.forEach((n) => n.dismiss())} />
-      <box widthRequest={400} class={'notification'} spacing={10}>
-        {n.image && <image class='image' file={n.image} />}
-        <box orientation={Gtk.Orientation.VERTICAL}>
-          <box>
-            <label class='title' ellipsize={Pango.EllipsizeMode.END} label={n.summary} />
-            <image
-              visible={Boolean(n.desktopEntry)}
-              hexpand
-              halign={Gtk.Align.END}
-              valign={Gtk.Align.START}
-              pixelSize={22}
-              iconName={n.desktopEntry}
-            />
-          </box>
-          <Gtk.Separator visible widthRequest={400} />
+      <box
+        widthRequest={400}
+        class={`notification ${n.urgency === AstalNotifd.Urgency.CRITICAL && 'critical'}`}
+        orientation={Gtk.Orientation.VERTICAL}
+      >
+        <box class='header'>
+          {n.desktopEntry && <image iconName={n.desktopEntry} />}
           <label
-            class='content'
-            visible={Boolean(n.body)}
-            wrap
-            useMarkup
+            class='app-name'
             halign={Gtk.Align.START}
-            label={n.body}
+            ellipsize={Pango.EllipsizeMode.END}
+            label={n.appName || 'Unknown'}
+          />
+          <label
+            class='time'
+            hexpand
+            halign={Gtk.Align.END}
+            label={GLib.DateTime.new_from_unix_local(n.time).format('%H:%M')!}
           />
         </box>
+        <Gtk.Separator visible />
+        <box class='content' orientation={Gtk.Orientation.VERTICAL}>
+          <label
+            class='summary'
+            halign={Gtk.Align.START}
+            xalign={0}
+            label={n.summary}
+            ellipsize={Pango.EllipsizeMode.END}
+          />
+          {n.body && (
+            <label
+              class='body'
+              wrap
+              useMarkup
+              halign={Gtk.Align.START}
+              xalign={0}
+              justify={Gtk.Justification.FILL}
+              label={n.body}
+            />
+          )}
+        </box>
+        {n.actions.length > 0 && (
+          <box class='actions'>
+            {n.actions.map(({ label, id }) => (
+              <button hexpand onClicked={() => n.invoke(id)}>
+                <label label={label} halign={Gtk.Align.CENTER} hexpand />
+              </button>
+            ))}
+          </box>
+        )}
       </box>
     </Adw.Clamp>
   )

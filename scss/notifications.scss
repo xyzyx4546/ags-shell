@@ -1,25 +1,72 @@
 @use "colors.scss" as *;
+@use "sass:color";
 
 .notifications {
   margin: 20px;
 
   .notification {
-    padding: 8px 10px;
     border-radius: 15px;
     background-color: $background;
 
-    .image {
-      min-width: 50px;
-      min-height: 50px;
+    &.critical {
+      border: 2px solid $red;
     }
 
-    .title {
-      font-size: 22px;
+    .header {
+      padding: 9px 15px;
+      color: rgba($foreground, 0.7);
+
+      .app-name {
+        margin-left: 6px;
+        font-weight: bold;
+
+        &:first-child {
+          margin-left: 0;
+        }
+      }
+    }
+
+    separator {
+      margin: 0 10px;
+      background-color: rgba($foreground, 0.2);
     }
 
     .content {
-      font-size: 14px;
-      margin-top: 8px;
+      padding: 15px;
+      padding-top: 9px;
+
+      .summary {
+        font-size: 22px;
+      }
+
+      .body {
+        color: rgba($foreground, 0.9);
+      }
+    }
+
+    .actions {
+      margin: 15px;
+      margin-top: 0;
+
+      button {
+        margin: 0 6px;
+        padding: 6px;
+        border-radius: 15px;
+        border: 1px solid rgba($foreground, 0.2);
+        transition: background-color 0.3s;
+
+        &:first-child {
+          margin-left: 0;
+        }
+
+        &:last-child {
+          margin-right: 0;
+        }
+
+        &:hover {
+          background-color: color.mix($background, $foreground, 90%);
+        }
+      }
     }
   }
 }
