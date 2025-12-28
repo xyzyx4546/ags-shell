@@ -35,9 +35,10 @@ export default function Osd() {
   const volumeIcon = createBinding(speaker, 'volumeIcon')
   const volumePercent = volume.as((p) => `${Math.round(p * 100)}`)
 
-  ;['notify::volume', 'notify::mute'].forEach((signal: string) =>
-    speaker.connect(signal, () => showOsd('volume')),
-  )
+  ;['notify::volume', 'notify::mute'].forEach((signal: string) => {
+    let initialized = false
+    speaker.connect(signal, () => (initialized ? showOsd('volume') : (initialized = true)))
+  })
 
   const [brightness, setBrightness] = createState(0)
   const brightnessPercent = brightness.as((r) => `${Math.round(r * 100)}`)
