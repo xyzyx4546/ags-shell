@@ -13,6 +13,7 @@ type Props = {
 function Notification({ notification: n }: Props) {
   return (
     <Adw.Clamp maximumSize={400}>
+      <Gtk.GestureClick button={3} onPressed={() => n.dismiss()} />
       <box
         widthRequest={400}
         class={`notification ${n.urgency === AstalNotifd.Urgency.CRITICAL && 'critical'}`}
@@ -70,11 +71,16 @@ function Notification({ notification: n }: Props) {
 
 export default function Notifications() {
   const notifd = AstalNotifd.get_default()
-  const [notifications, setNotifications] = createState(new Array<AstalNotifd.Notification>())
+  const [notifications, setNotifications] = createState(notifd.notifications)
 
   notifd.connect('notified', (_, id, replaced) => {
     const notification = notifd.get_notification(id)
     if (!notification) return
+
+    GLib.timeout_add(GLib.PRIORITY_DEFAULT, 5000, () => {
+      notification.dismiss()
+      return GLib.SOURCE_REMOVE
+    })
 
     if (replaced && notifications().some((n) => n.id === id)) {
       setNotifications((ns) => ns.map((n) => (n.id === id ? notification : n)))
