@@ -4,11 +4,13 @@ import Astal from 'gi://Astal?version=4.0'
 import Gtk from 'gi://Gtk?version=4.0'
 import Gdk from 'gi://Gdk?version=4.0'
 import AstalBattery from 'gi://AstalBattery'
-import AstalTray from 'gi://AstalTray'
 import AstalHyprland from 'gi://AstalHyprland'
+import AstalNetwork from 'gi://AstalNetwork'
+import AstalTray from 'gi://AstalTray'
 import AstalWp from 'gi://AstalWp'
 import { For, createBinding } from 'ags'
 import { createPoll } from 'ags/time'
+import { fetch } from 'ags/fetch'
 
 function Workspaces() {
   const hyprland = AstalHyprland.get_default()
@@ -69,6 +71,38 @@ function Tray() {
 
 // TODO: network
 
+function Server() {
+  enum Status {
+    OK = 'ok',
+    FAILED = 'failed',
+    UNREACHABLE = 'unreachable',
+  }
+
+  const url = 'https://status.fam-ehrhardt.de'
+
+  const fetchStatus = async () => {
+    try {
+      const res = await fetch(url)
+      const html = await res.text()
+      return html.includes("class='red-text'") ? Status.FAILED : Status.OK
+    } catch {
+      return Status.UNREACHABLE
+    }
+  }
+
+  const status = createPoll(Status.OK, 10 * 1000, fetchStatus)
+
+  return (
+    <box class='item server'>
+      <button
+        onClicked={() => GLib.spawn_command_line_async(`xdg-open ${url}`)}
+        label={status.as((s) => `  ${s.toUpperCase()}`)}
+        class={status}
+      />
+    </box>
+  )
+}
+
 function Volume() {
   const { defaultSpeaker: speaker } = AstalWp.get_default()!
   const iconName = createBinding(speaker, 'volumeIcon')
@@ -126,6 +160,7 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
           <Tray />
         </box>
         <box $type='end' spacing={10}>
+          <Server />
           <Volume />
           <Battery />
           <Clock />

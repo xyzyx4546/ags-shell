@@ -15,6 +15,7 @@
 
     extraPackages = with inputs.ags.packages.${system}; [
       pkgs.libadwaita
+      pkgs.glib-networking
       astal4
       apps
       battery

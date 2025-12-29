@@ -28,6 +28,20 @@ window.bar {
     color: $orange;
   }
 
+  .server {
+    .ok {
+      color: $green;
+    }
+
+    .failed {
+      color: $orange;
+    }
+
+    .unreachable {
+      color: $red;
+    }
+  }
+
   .volume {
     color: $green;
   }
