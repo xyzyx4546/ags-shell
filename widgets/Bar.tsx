@@ -8,7 +8,7 @@ import AstalHyprland from 'gi://AstalHyprland'
 import AstalNetwork from 'gi://AstalNetwork'
 import AstalTray from 'gi://AstalTray'
 import AstalWp from 'gi://AstalWp'
-import { For, createBinding } from 'ags'
+import { For, With, createBinding } from 'ags'
 import { createPoll } from 'ags/time'
 import { fetch } from 'ags/fetch'
 
@@ -67,10 +67,6 @@ function Tray() {
   )
 }
 
-// TODO: Vitals
-
-// TODO: network
-
 function Server() {
   enum Status {
     OK = 'ok',
@@ -99,6 +95,33 @@ function Server() {
         label={status.as((s) => `  ${s.toUpperCase()}`)}
         class={status}
       />
+    </box>
+  )
+}
+
+function Network() {
+  const network = AstalNetwork.get_default()
+  const primary = createBinding(network, 'primary')
+
+  return (
+    <box class='item network'>
+      <With value={primary}>
+        {(p) =>
+          p === AstalNetwork.Primary.WIRED ? (
+            <box>
+              <image iconName={createBinding(network.wired, 'iconName')} />
+              <label
+                label={createBinding(network.wired, 'speed').as((s) => ` ${s / 1000}Gbit/s`)}
+              />
+            </box>
+          ) : (
+            <box>
+              <image iconName={createBinding(network.wifi, 'iconName')} />
+              <label label={createBinding(network.wifi, 'ssid').as((s) => ` ${s}`)} />
+            </box>
+          )
+        }
+      </With>
     </box>
   )
 }
@@ -158,9 +181,10 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
         <box $type='start' spacing={10}>
           <Workspaces />
           <Tray />
+          <Server />
         </box>
         <box $type='end' spacing={10}>
-          <Server />
+          <Network />
           <Volume />
           <Battery />
           <Clock />

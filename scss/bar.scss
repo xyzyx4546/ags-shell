@@ -42,8 +42,12 @@ window.bar {
     }
   }
 
-  .volume {
+  .network {
     color: $green;
+  }
+
+  .volume {
+    color: $yellow;
   }
 
   .battery {

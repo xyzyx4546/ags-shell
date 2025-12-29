@@ -20,6 +20,7 @@
       apps
       battery
       hyprland
+      network
       notifd
       tray
       wireplumber
