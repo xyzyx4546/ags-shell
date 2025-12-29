@@ -17,7 +17,6 @@ function Workspaces() {
   const workspaces = createBinding(hyprland, 'workspaces').as((wss) =>
     wss.filter((ws) => ws.id >= 0 && ws.monitor.id === 0).sort((a, b) => a.id - b.id),
   )
-  const focusedWorkspace = createBinding(hyprland, 'focusedWorkspace')
 
   return (
     <box class='item workspaces' spacing={10}>
@@ -27,7 +26,11 @@ function Workspaces() {
             onClicked={() => ws.focus()}
             class={createBinding(ws, 'clients').as((cs) => (cs.length === 0 ? 'empty' : ''))}
           >
-            <label label={focusedWorkspace.as((fw) => (ws === fw ? '' : ''))} />
+            <label
+              label={createBinding(hyprland, 'focusedWorkspace').as(() =>
+                hyprland.monitors.find((w) => w.id === 0)?.activeWorkspace.id === ws.id ? '' : '',
+              )}
+            />
           </button>
         )}
       </For>
