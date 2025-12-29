@@ -25,10 +25,7 @@ function Workspaces() {
         {(ws) => (
           <button
             onClicked={() => ws.focus()}
-            // FIX: doesnt trigger on move of client
-            class={createBinding(hyprland, 'clients').as(() =>
-              ws.clients.length == 0 ? 'empty' : '',
-            )}
+            class={createBinding(ws, 'clients').as((cs) => (cs.length === 0 ? 'empty' : ''))}
           >
             <label label={focusedWorkspace.as((fw) => (ws === fw ? '' : ''))} />
           </button>
