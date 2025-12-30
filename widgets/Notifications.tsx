@@ -95,9 +95,11 @@ export default function Notifications() {
 
   return (
     <window
+      visible={notifications((ns) => ns.length > 0)}
+      name='Notifications'
+      namespace='notifications'
       class='notifications'
       monitor={0}
-      visible={notifications((ns) => ns.length > 0)}
       anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.RIGHT}
     >
       <box orientation={Gtk.Orientation.VERTICAL} spacing={10}>

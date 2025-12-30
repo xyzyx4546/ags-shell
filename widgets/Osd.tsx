@@ -53,6 +53,7 @@ export default function Osd() {
       $={(ref) => (win = ref)}
       visible={false}
       name='Osd'
+      namespace='osd'
       class='osd'
       monitor={0}
       anchor={Astal.WindowAnchor.RIGHT}

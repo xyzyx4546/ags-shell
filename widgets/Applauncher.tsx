@@ -16,7 +16,7 @@ export default function Applauncher() {
   }
 
   function launch() {
-    let app = selectedApp.get()
+    let app = selectedApp()
     if (app) {
       win.hide()
       app.launch()
@@ -32,6 +32,7 @@ export default function Applauncher() {
       $={(ref) => (win = ref)}
       visible={false}
       name='Applauncher'
+      namespace='applauncher'
       class='applauncher'
       monitor={0}
       keymode={Astal.Keymode.EXCLUSIVE}
