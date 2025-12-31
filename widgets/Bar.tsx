@@ -74,7 +74,7 @@ function Server() {
     UNREACHABLE = 'unreachable',
   }
 
-  const url = 'https://status.fam-ehrhardt.de'
+  const url = 'https://status.fam-ehrhardt.de/'
 
   const fetchStatus = async () => {
     try {
