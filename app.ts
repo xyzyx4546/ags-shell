@@ -3,14 +3,13 @@ import style from './scss/style.scss'
 import Bar from './widgets/Bar'
 import Osd from './widgets/Osd'
 import Notifications from './widgets/Notifications'
-import Applauncher from './widgets/Applauncher'
+import Launcher from './widgets/Launcher'
 
 app.start({
   css: style,
   icons: './icons',
   requestHandler(argv, res) {
     const [cmd, arg] = argv
-    console.log(cmd)
     switch (cmd) {
       case 'toggle':
         const w = app.get_window(arg)
@@ -24,6 +23,6 @@ app.start({
     app.get_monitors().map(Bar)
     Osd()
     Notifications()
-    Applauncher()
+    Launcher()
   },
 })
