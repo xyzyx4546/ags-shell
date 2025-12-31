@@ -53,7 +53,7 @@ function Tray() {
   }
 
   return (
-    <box class='item' spacing={3} visible={items.as((items) => items.length > 0)}>
+    <box class='item' spacing={3} visible={items((items) => items.length > 0)}>
       <For each={items}>
         {(item) =>
           item.gicon && (
@@ -92,7 +92,7 @@ function Server() {
     <box class='item server'>
       <button
         onClicked={() => GLib.spawn_command_line_async(`xdg-open ${url}`)}
-        label={status.as((s) => `  ${s.toUpperCase()}`)}
+        label={status((s) => `  ${s.toUpperCase()}`)}
         class={status}
       />
     </box>
@@ -134,7 +134,7 @@ function Volume() {
   return (
     <box class='item volume'>
       <image iconName={iconName} />
-      <label label={percentage.as((p) => ` ${Math.round(p * 100)}%`)} />
+      <label label={percentage((p) => ` ${Math.round(p * 100)}%`)} />
     </box>
   )
 }

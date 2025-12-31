@@ -33,7 +33,7 @@ export default function Osd() {
 
   const volume = createBinding(speaker, 'volume')
   const volumeIcon = createBinding(speaker, 'volumeIcon')
-  const volumePercent = volume.as((p) => `${Math.round(p * 100)}`)
+  const volumePercent = volume((v) => `${Math.round(v * 100)}`)
 
   ;['notify::volume', 'notify::mute'].forEach((signal: string) => {
     let initialized = false
@@ -41,7 +41,7 @@ export default function Osd() {
   })
 
   const [brightness, setBrightness] = createState(0)
-  const brightnessPercent = brightness.as((r) => `${Math.round(r * 100)}`)
+  const brightnessPercent = brightness((b) => `${Math.round(b * 100)}`)
 
   monitorFile(brightnessFile, () => {
     setBrightness(parseInt(readFile(brightnessFile)) / maxBrightness)
